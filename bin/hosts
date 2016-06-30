@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+if command -v virsh > /dev/null 2>&1; then
+  sudo virsh list --name | while read h
+  do
+    if [ -n "$h" ]; then
+      ip=$(sudo virsh domifaddr $h | grep ipv4 | awk '{print $4}' | sed 's@/.*@@')
+      echo $ip $h
+    fi
+  done
+else
+  echo "Run this on the virt-manager host to generate the IP list."
+fi
